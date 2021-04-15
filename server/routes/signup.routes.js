@@ -1,10 +1,24 @@
 import express from 'express';
 
+import SignUp from '../models/signup.models.js';
+
 const router = express.Router();
 
 router.post('/signup', (req, res) => {
-    res.status(200).send("YOU HAVE REACHED POST API CALL");
+    //res.status(200).send("YOU HAVE REACHED POST API CALL");
+    const signedUpUser = req.body;
 
+    // e.g. of req.body
+    // signedUpUser = {
+    //     fullName: 'Rutul Shah',
+    //     userName: 'rush',
+    //     email: 'rutulshah@gmail.com',
+    //     password: 'helloWorld'
+    //   }
+
+    const saveSignedUpUser = new SignUp(signedUpUser);
+    saveSignedUpUser.save();
+    res.status(201).json(saveSignedUpUser);
 });
 
 export default router;

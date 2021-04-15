@@ -3,6 +3,8 @@ import signUpRoutes from './routes/signup.routes.js';
 
 const app = express();
 
+app.use(express.json());
+
 //endpoint starting with client
 app.use('/client', signUpRoutes);
 
