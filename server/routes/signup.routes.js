@@ -17,8 +17,15 @@ router.post('/signup', (req, res) => {
     //   }
 
     const saveSignedUpUser = new SignUp(signedUpUser);
-    saveSignedUpUser.save();
-    res.status(201).json(saveSignedUpUser);
+    
+    saveSignedUpUser.save()
+    .then( data => {
+        res.status(201).json(data);        
+    })
+    .catch( error => {
+        console.log(error)
+    });
+
 });
 
 export default router;
