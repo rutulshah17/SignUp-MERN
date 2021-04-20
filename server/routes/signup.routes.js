@@ -2,13 +2,20 @@ import express from 'express';
 
 import SignUp from '../models/signup.models.js';
 
+//used for excrypting password
+import bcrypt from 'bcrypt';
+
 const router = express.Router();
 
-router.post('/signup', (req, res) => {
-    //res.status(200).send("YOU HAVE REACHED POST API CALL");
+router.post('/signup', async (req, res) => {
+    
+    //encrypting password we get from frontEnd
+    const saltPassword = await bcrypt.genSalt(5);
+    const securePassword = await bcrypt.hash(req.body.password, saltPassword);
+    
     const signedUpUser = req.body;
 
-    // e.g. of req.body
+    // e.g. of req.body (password will be changed with securePassword)
     // signedUpUser = {
     //     fullName: 'Rutul Shah',
     //     userName: 'rush',
@@ -16,9 +23,12 @@ router.post('/signup', (req, res) => {
     //     password: 'helloWorld'
     //   }
 
-    const saveSignedUpUser = new SignUp(signedUpUser);
+    const saveSignedUpUser = new SignUp({
+        ...signedUpUser, 
+        password: securePassword
+    });
     
-    saveSignedUpUser.save()
+    await saveSignedUpUser.save()
     .then( data => {
         res.status(201).json(data);        
     })
